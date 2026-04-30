@@ -12,6 +12,7 @@
 * Update German translations ([Issue #791], [PR #837 @ElsAr4e])
 * Add Korean translations ([PR #839 @RobertGarciaa])
 * Update Chinese translations ([PR #849 @lofx-lee])
+* Update dependencies ([PR #851 @chenxiaolong])
 
 ### Version 2.8
 
@@ -1253,3 +1254,4 @@ Non-user-facing changes:
 [PR #837 @ElsAr4e]: https://github.com/chenxiaolong/BCR/pull/837
 [PR #839 @RobertGarciaa]: https://github.com/chenxiaolong/BCR/pull/839
 [PR #849 @lofx-lee]: https://github.com/chenxiaolong/BCR/pull/849
+[PR #851 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/851
