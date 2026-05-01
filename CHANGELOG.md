@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Update German translations ([Issue #791], [PR #852 @ElsAr4e])
+
 ### Version 2.9
 
 * Update German translations ([Issue #791], [PR #837 @ElsAr4e])
@@ -1257,3 +1259,4 @@ Non-user-facing changes:
 [PR #839 @RobertGarciaa]: https://github.com/chenxiaolong/BCR/pull/839
 [PR #849 @lofx-lee]: https://github.com/chenxiaolong/BCR/pull/849
 [PR #851 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/851
+[PR #852 @ElsAr4e]: https://github.com/chenxiaolong/BCR/pull/852
