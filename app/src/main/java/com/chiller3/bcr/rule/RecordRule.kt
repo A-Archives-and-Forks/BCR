@@ -17,6 +17,38 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+// We have no good way to deserialize LegacyAction into Action:
+// https://github.com/Kotlin/kotlinx.serialization/issues/2460
+// https://github.com/Kotlin/kotlinx.serialization/issues/2463
+@Parcelize
+@Serializable
+data class LegacyRecordRule(
+    @SerialName("call_number")
+    val callNumber: RecordRule.CallNumber,
+    @SerialName("call_type")
+    val callType: RecordRule.CallType,
+    @SerialName("sim_slot")
+    val simSlot: RecordRule.SimSlot,
+    @SerialName("action")
+    val legacyAction: LegacyAction,
+) : Parcelable {
+    @Parcelize
+    @Serializable
+    enum class LegacyAction : Parcelable {
+        SAVE,
+        DISCARD,
+        IGNORE;
+
+        fun toAction(): RecordRule.Action = when (this) {
+            SAVE -> RecordRule.Action.Save(initialState = RecordRule.InitialState.RECORDING)
+            DISCARD -> RecordRule.Action.Discard(initialState = RecordRule.InitialState.RECORDING)
+            IGNORE -> RecordRule.Action.Ignore
+        }
+    }
+
+    fun toRecordRule() = RecordRule(callNumber, callType, simSlot, legacyAction.toAction())
+}
+
 /**
  * A rule specifies several conditions, which are ANDed together, and if a call matches, then the
  * specified action is taken.
@@ -131,24 +163,40 @@ data class RecordRule(
 
     @Parcelize
     @Serializable
-    enum class Action : Parcelable {
+    enum class InitialState : Parcelable {
+        RECORDING,
+        PAUSED,
+    }
+
+    @Parcelize
+    @Serializable
+    sealed interface Action : Parcelable {
         /**
-         * Save the recording when the call ends unless the user chooses to delete it during the call
-         * via the notification.
+         * Save the recording when the call ends unless the user chooses to delete it during the
+         * call via the notification.
          */
-        SAVE,
+        @Parcelize
+        @Serializable
+        @SerialName("save")
+        data class Save(val initialState: InitialState) : Action
 
         /**
          * Delete the recording when the call ends unless the user chooses to preserve it during the
          * call via the notification.
          */
-        DISCARD,
+        @Parcelize
+        @Serializable
+        @SerialName("discard")
+        data class Discard(val initialState: InitialState) : Action
 
         /**
-         * Completely ignore the call. [com.chiller3.bcr.RecorderThread] will exit without writing any
-         * output files. It is not possible to start a recording later for a matching call.
+         * Completely ignore the call. [com.chiller3.bcr.RecorderThread] will exit without writing
+         * any output files. It is not possible to start a recording later for a matching call.
          */
-        IGNORE,
+        @Parcelize
+        @Serializable
+        @SerialName("ignore")
+        data object Ignore : Action
     }
 
     companion object {

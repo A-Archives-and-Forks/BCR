@@ -210,16 +210,16 @@ class RecorderThread(
             RecordRule.evaluate(context, rules, numbers, metadata.direction, metadata.simSlot)
         } catch (e: Exception) {
             Log.w(tag, "Failed to evaluate record rules", e)
-            // Err on the side of caution
-            RecordRule.Action.SAVE
+            // Err on the side of caution.
+            RecordRule.Action.Save(initialState = RecordRule.InitialState.RECORDING)
         }
 
         Log.i(tag, "Record rule action: $action")
 
-        val keep = when (action) {
-            RecordRule.Action.SAVE -> true
-            RecordRule.Action.DISCARD -> false
-            RecordRule.Action.IGNORE -> {
+        val (keep, initialState) = when (action) {
+            is RecordRule.Action.Save -> true to action.initialState
+            is RecordRule.Action.Discard -> false to action.initialState
+            RecordRule.Action.Ignore -> {
                 Log.i(tag, "Cancelling due to record rules")
                 cancel()
                 return
@@ -238,6 +238,8 @@ class RecorderThread(
                 KeepState.DISCARD
             },
         )
+
+        isPaused = initialState == RecordRule.InitialState.PAUSED
 
         listener.onRecordingStateChanged(this)
     }
@@ -673,7 +675,7 @@ class RecorderThread(
         var numFramesTotal = 0L
         var numFramesEncoded = 0L
         var bufferOverruns = 0
-        var wasEverPaused = false
+        var wasEverPaused = isPaused
         var wasEverHolding = false
         var wasReadSamplesError = false
         var wasPureSilence = true

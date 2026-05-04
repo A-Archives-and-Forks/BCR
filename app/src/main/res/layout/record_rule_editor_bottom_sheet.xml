@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    SPDX-FileCopyrightText: 2024 Andrew Gunnerson
+    SPDX-FileCopyrightText: 2024-2026 Andrew Gunnerson
     SPDX-License-Identifier: GPL-3.0-only
 -->
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -122,5 +122,34 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/bottom_sheet_title_margin_bottom"
             android:textAlignment="center" />
+
+        <LinearLayout
+            android:id="@+id/initial_state_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/bottom_sheet_section_separation"
+                android:text="@string/record_rule_initial_state_title"
+                android:textAppearance="?attr/textAppearanceHeadline6" />
+
+            <com.chiller3.bcr.view.ChipGroupCentered
+                android:id="@+id/initial_state_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/bottom_sheet_title_margin_bottom"
+                app:selectionRequired="true"
+                app:singleSelection="true" />
+
+            <TextView
+                android:id="@+id/initial_state_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/bottom_sheet_title_margin_bottom"
+                android:textAlignment="center" />
+        </LinearLayout>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

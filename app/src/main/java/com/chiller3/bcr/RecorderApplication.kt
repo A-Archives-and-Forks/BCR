@@ -50,6 +50,7 @@ class RecorderApplication : Application() {
         val prefs = Preferences(this)
         prefs.migrateTemplate()
         prefs.migrateAudioSource()
+        prefs.migrateRecordRules()
     }
 
     companion object {

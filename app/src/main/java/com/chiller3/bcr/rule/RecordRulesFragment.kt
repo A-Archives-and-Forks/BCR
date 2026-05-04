@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2023-2024 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2023-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -117,7 +117,7 @@ class RecordRulesFragment : PreferenceBaseFragment(), Preference.OnPreferenceCli
                     callNumber = RecordRule.CallNumber.Any,
                     callType = RecordRule.CallType.ANY,
                     simSlot = RecordRule.SimSlot.Any,
-                    action = RecordRule.Action.SAVE,
+                    action = RecordRule.Action.Save(initialState = RecordRule.InitialState.RECORDING),
                 )
 
                 RecordRuleEditorBottomSheet.newInstance(-1, newRule, false)

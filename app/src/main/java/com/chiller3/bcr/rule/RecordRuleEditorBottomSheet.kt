@@ -62,6 +62,9 @@ class RecordRuleEditorBottomSheet : BottomSheetDialogFragment(),
     private var chipIdActionDiscard: Int = -1
     private var chipIdActionIgnore: Int = -1
 
+    private var chipIdInitialStateRecording: Int = -1
+    private var chipIdInitialStatePaused: Int = -1
+
     private var postPermissionAction: PostPermissionAction? = null
 
     private val requestPermission =
@@ -138,17 +141,21 @@ class RecordRuleEditorBottomSheet : BottomSheetDialogFragment(),
         addCallTypeChips(inflater)
         addSimSlotChips(inflater)
         addActionChips(inflater)
+        addInitialStateChips(inflater)
 
         binding.callNumberGroup.setOnCheckedStateChangeListener(this)
         binding.callTypeGroup.setOnCheckedStateChangeListener(this)
         binding.simSlotGroup.setOnCheckedStateChangeListener(this)
         binding.actionGroup.setOnCheckedStateChangeListener(this)
+        binding.initialStateGroup.setOnCheckedStateChangeListener(this)
 
         refreshCallNumber()
         refreshCallType()
         refreshSimSlot()
         refreshAction()
         refreshActionDescription()
+        refreshInitialState()
+        refreshInitialStateDescription()
 
         // Conditions are not editable for the default rule.
         binding.callNumberLayout.isVisible = !isDefault
@@ -312,6 +319,16 @@ class RecordRuleEditorBottomSheet : BottomSheetDialogFragment(),
         chipIdActionIgnore = chipBinding.root.id
     }
 
+    private fun addInitialStateChips(inflater: LayoutInflater) {
+        var chipBinding = addChip(inflater, binding.initialStateGroup)
+        chipBinding.root.setText(R.string.record_rule_initial_state_recording_chip)
+        chipIdInitialStateRecording = chipBinding.root.id
+
+        chipBinding = addChip(inflater, binding.initialStateGroup)
+        chipBinding.root.setText(R.string.record_rule_initial_state_paused_chip)
+        chipIdInitialStatePaused = chipBinding.root.id
+    }
+
     private fun initContactOrGroup() {
         when (val callNumber = recordRule.callNumber) {
             RecordRule.CallNumber.Any -> {}
@@ -390,9 +407,9 @@ class RecordRuleEditorBottomSheet : BottomSheetDialogFragment(),
 
     private fun refreshAction() {
         val chipId = when (recordRule.action) {
-            RecordRule.Action.SAVE -> chipIdActionSave
-            RecordRule.Action.DISCARD -> chipIdActionDiscard
-            RecordRule.Action.IGNORE -> chipIdActionIgnore
+            is RecordRule.Action.Save -> chipIdActionSave
+            is RecordRule.Action.Discard -> chipIdActionDiscard
+            is RecordRule.Action.Ignore -> chipIdActionIgnore
         }
 
         binding.actionGroup.check(chipId)
@@ -400,12 +417,47 @@ class RecordRuleEditorBottomSheet : BottomSheetDialogFragment(),
 
     private fun refreshActionDescription() {
         val descriptionId = when (recordRule.action) {
-            RecordRule.Action.SAVE -> R.string.record_rule_action_save_desc
-            RecordRule.Action.DISCARD -> R.string.record_rule_action_discard_desc
-            RecordRule.Action.IGNORE -> R.string.record_rule_action_ignore_desc
+            is RecordRule.Action.Save -> R.string.record_rule_action_save_desc
+            is RecordRule.Action.Discard -> R.string.record_rule_action_discard_desc
+            is RecordRule.Action.Ignore -> R.string.record_rule_action_ignore_desc
         }
 
         binding.actionDesc.setText(descriptionId)
+    }
+
+    private fun refreshInitialState() {
+        val initialState = when (val action = recordRule.action) {
+            is RecordRule.Action.Save -> action.initialState
+            is RecordRule.Action.Discard -> action.initialState
+            is RecordRule.Action.Ignore -> {
+                binding.initialStateLayout.isVisible = false
+                return
+            }
+        }
+
+        binding.initialStateLayout.isVisible = true
+
+        val chipId = when (initialState) {
+            RecordRule.InitialState.RECORDING -> chipIdInitialStateRecording
+            RecordRule.InitialState.PAUSED -> chipIdInitialStatePaused
+        }
+
+        binding.initialStateGroup.check(chipId)
+    }
+
+    private fun refreshInitialStateDescription() {
+        val initialState = when (val action = recordRule.action) {
+            is RecordRule.Action.Save -> action.initialState
+            is RecordRule.Action.Discard -> action.initialState
+            RecordRule.Action.Ignore -> return
+        }
+
+        val descriptionId = when (initialState) {
+            RecordRule.InitialState.RECORDING -> R.string.record_rule_initial_state_recording_desc
+            RecordRule.InitialState.PAUSED -> R.string.record_rule_initial_state_paused_desc
+        }
+
+        binding.initialStateDesc.setText(descriptionId)
     }
 
     override fun onCheckedChanged(group: ChipGroup, checkedIds: MutableList<Int>) {
@@ -459,16 +511,41 @@ class RecordRuleEditorBottomSheet : BottomSheetDialogFragment(),
                 recordRule = recordRule.copy(simSlot = simSlot)
             }
             binding.actionGroup -> {
+                val initialState = when (val action = recordRule.action) {
+                    is RecordRule.Action.Save -> action.initialState
+                    is RecordRule.Action.Discard -> action.initialState
+                    RecordRule.Action.Ignore -> RecordRule.InitialState.RECORDING
+                }
+
                 val action = when (checkedIds.first()) {
-                    chipIdActionSave -> RecordRule.Action.SAVE
-                    chipIdActionDiscard -> RecordRule.Action.DISCARD
-                    chipIdActionIgnore -> RecordRule.Action.IGNORE
+                    chipIdActionSave -> RecordRule.Action.Save(initialState = initialState)
+                    chipIdActionDiscard -> RecordRule.Action.Discard(initialState = initialState)
+                    chipIdActionIgnore -> RecordRule.Action.Ignore
                     else -> throw IllegalStateException("Invalid action chip ID")
                 }
 
                 recordRule = recordRule.copy(action = action)
 
                 refreshActionDescription()
+                refreshInitialState()
+                refreshInitialStateDescription()
+            }
+            binding.initialStateGroup -> {
+                val initialState = when (checkedIds.first()) {
+                    chipIdInitialStateRecording -> RecordRule.InitialState.RECORDING
+                    chipIdInitialStatePaused -> RecordRule.InitialState.PAUSED
+                    else -> throw IllegalStateException("Invalid initial state chip ID")
+                }
+
+                val action = when (val action = recordRule.action) {
+                    is RecordRule.Action.Save -> action.copy(initialState = initialState)
+                    is RecordRule.Action.Discard -> action.copy(initialState = initialState)
+                    RecordRule.Action.Ignore -> action
+                }
+
+                recordRule = recordRule.copy(action = action)
+
+                refreshInitialStateDescription()
             }
         }
     }

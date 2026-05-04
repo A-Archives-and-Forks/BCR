@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2024 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2024-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -191,11 +191,27 @@ internal class RecordRulesAdapter(
             }
 
             val actionMsgId = when (rule.action) {
-                RecordRule.Action.SAVE -> R.string.record_rule_action_save_summary
-                RecordRule.Action.DISCARD -> R.string.record_rule_action_discard_summary
-                RecordRule.Action.IGNORE -> R.string.record_rule_action_ignore_summary
+                is RecordRule.Action.Save -> R.string.record_rule_action_save_summary
+                is RecordRule.Action.Discard -> R.string.record_rule_action_discard_summary
+                is RecordRule.Action.Ignore -> R.string.record_rule_action_ignore_summary
             }
             append(context.getString(actionMsgId))
+
+            val initialState = when (val action = rule.action) {
+                is RecordRule.Action.Save -> action.initialState
+                is RecordRule.Action.Discard -> action.initialState
+                RecordRule.Action.Ignore -> null
+            }
+            if (initialState != null) {
+                val initialStateResId = when (initialState) {
+                    RecordRule.InitialState.RECORDING ->
+                        R.string.record_rule_initial_state_recording_summary
+                    RecordRule.InitialState.PAUSED ->
+                        R.string.record_rule_initial_state_paused_summary
+                }
+                append('\n')
+                append(context.getString(initialStateResId))
+            }
         }
     }
 

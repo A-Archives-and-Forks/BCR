@@ -22,6 +22,7 @@ import com.chiller3.bcr.extension.safTreeToDocument
 import com.chiller3.bcr.format.AudioSource
 import com.chiller3.bcr.format.Format
 import com.chiller3.bcr.output.Retention
+import com.chiller3.bcr.rule.LegacyRecordRule
 import com.chiller3.bcr.rule.RecordRule
 import com.chiller3.bcr.settings.SettingsActivity
 import com.chiller3.bcr.template.Template
@@ -77,7 +78,7 @@ class Preferences(initialContext: Context) {
                 callNumber = RecordRule.CallNumber.Any,
                 callType = RecordRule.CallType.ANY,
                 simSlot = RecordRule.SimSlot.Any,
-                action = RecordRule.Action.SAVE,
+                action = RecordRule.Action.Save(initialState = RecordRule.InitialState.RECORDING),
             ),
         )
 
@@ -137,7 +138,6 @@ class Preferences(initialContext: Context) {
     }
 
     /** Whether to show debug preferences and enable creation of debug logs for all calls. */
-    @Suppress("KotlinConstantConditions", "SimplifyBooleanWithConstants")
     var isDebugMode: Boolean
         get() = BuildConfig.DEBUG || prefs.getBoolean(PREF_DEBUG_MODE, false)
         set(enabled) = prefs.edit { putBoolean(PREF_DEBUG_MODE, enabled) }
@@ -291,15 +291,29 @@ class Preferences(initialContext: Context) {
         get() = prefs.getBoolean(PREF_CALL_RECORDING, false)
         set(enabled) = prefs.edit { putBoolean(PREF_CALL_RECORDING, enabled) }
 
-    /** List of rules to determine which action to take for a specific call. */
-    var recordRules: List<RecordRule>?
-        get() = prefs.getString(PREF_RECORD_RULES, null)?.let { JSON_FORMAT.decodeFromString(it) }
+    /** Raw JSON of the record rules for migration. */
+    private var rawRecordRules: String?
+        get() = prefs.getString(PREF_RECORD_RULES, null)
         set(rules) = prefs.edit {
             if (rules == null) {
                 remove(PREF_RECORD_RULES)
             } else {
-                putString(PREF_RECORD_RULES, JSON_FORMAT.encodeToString(rules))
+                putString(PREF_RECORD_RULES, rules)
             }
+        }
+
+    /** List of rules to determine which action to take for a specific call. */
+    var recordRules: List<RecordRule>?
+        get() = rawRecordRules?.let {
+            try {
+                JSON_FORMAT.decodeFromString(it)
+            } catch (e: IllegalArgumentException) {
+                Log.w(TAG, "Ignoring invalid record rules: $it", e)
+                null
+            }
+        }
+        set(rules) {
+            rawRecordRules = JSON_FORMAT.encodeToString(rules)
         }
 
     /**
@@ -477,6 +491,19 @@ class Preferences(initialContext: Context) {
             }
 
             prefs.edit { remove(PREF_FORMAT_STEREO) }
+        }
+    }
+
+    /** Can be removed starting with BCR 2.19. */
+    fun migrateRecordRules() {
+        val rawRecordRules = rawRecordRules ?: return
+
+        try {
+            val legacyRules = JSON_FORMAT.decodeFromString<List<LegacyRecordRule>>(rawRecordRules)
+
+            recordRules = legacyRules.map { it.toRecordRule() }
+        } catch (_: IllegalArgumentException) {
+            // Already migrated.
         }
     }
 }

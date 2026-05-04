@@ -144,13 +144,28 @@
     <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
     <string name="record_rule_action_discard_desc">Discard the recording at the end of the call. The recording can be preserved via the notification shown during a call.</string>
     <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
-    <string name="record_rule_action_ignore_desc">Completely ignore the call. The call will not be recorded and it is not possible to start the recording during the call.</string>
-    <!-- Summary shown in the record rules list descriptions. This should include a "Action: " prefix for visual consistency. -->
+    <string name="record_rule_action_ignore_desc">Completely ignore the call. The call will not be recorded, and it is not possible to start the recording during the call.</string>
+    <!-- Summary shown in the record rules list descriptions. This should include an "Action: " prefix for visual consistency. -->
     <string name="record_rule_action_save_summary">Action: Save recording</string>
-    <!-- Summary shown in the record rules list descriptions. This should include a "Action: " prefix for visual consistency. -->
+    <!-- Summary shown in the record rules list descriptions. This should include an "Action: " prefix for visual consistency. -->
     <string name="record_rule_action_discard_summary">Action: Discard recording</string>
-    <!-- Summary shown in the record rules list descriptions. This should include a "Action: " prefix for visual consistency. -->
+    <!-- Summary shown in the record rules list descriptions. This should include an "Action: " prefix for visual consistency. -->
     <string name="record_rule_action_ignore_summary">Action: Ignore call</string>
+
+    <!-- Title of the record rule editor section to configure whether the recording begins immediately or starts in the paused state. -->
+    <string name="record_rule_initial_state_title">Initial state</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_initial_state_recording_chip">Recording</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_initial_state_paused_chip">Paused</string>
+    <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
+    <string name="record_rule_initial_state_recording_desc">The recording will begin immediately when the call connects.</string>
+    <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
+    <string name="record_rule_initial_state_paused_desc">The recording will be paused when the call connects. Audio will not be recorded until the recording is resumed via the notification.</string>
+    <!-- Summary shown in the record rules list descriptions. This should include an "Initial state: " prefix for visual consistency. -->
+    <string name="record_rule_initial_state_recording_summary">Initial state: Record immediately</string>
+    <!-- Summary shown in the record rules list descriptions. This should include an "Initial state: " prefix for visual consistency. -->
+    <string name="record_rule_initial_state_paused_summary">Initial state: Paused until manually resumed</string>
 
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">Change directory</string>
