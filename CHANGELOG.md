@@ -10,6 +10,7 @@
 ### Unreleased
 
 * Update German translations ([Issue #791], [PR #852 @ElsAr4e])
+* Add record rule option to start recordings in the paused state ([Issue #853], [PR #854 @chenxiaolong])
 
 ### Version 2.9
 
@@ -907,6 +908,7 @@ Non-user-facing changes:
 [Issue #806]: https://github.com/chenxiaolong/BCR/issues/806
 [Issue #819]: https://github.com/chenxiaolong/BCR/issues/819
 [Issue #833]: https://github.com/chenxiaolong/BCR/issues/833
+[Issue #853]: https://github.com/chenxiaolong/BCR/issues/853
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -1260,3 +1262,4 @@ Non-user-facing changes:
 [PR #849 @lofx-lee]: https://github.com/chenxiaolong/BCR/pull/849
 [PR #851 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/851
 [PR #852 @ElsAr4e]: https://github.com/chenxiaolong/BCR/pull/852
+[PR #854 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/854
