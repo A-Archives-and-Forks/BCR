@@ -111,6 +111,14 @@
     <string name="record_rule_action_discard_summary">Aktion: Aufnahme verwerfen</string>
     <string name="record_rule_action_ignore_summary">Aktion: Anruf ignorieren</string>
 
+    <string name="record_rule_initial_state_title">Initial state</string>
+    <string name="record_rule_initial_state_recording_chip">Recording</string>
+    <string name="record_rule_initial_state_paused_chip">Paused</string>
+    <string name="record_rule_initial_state_recording_desc">The recording will begin immediately when the call connects.</string>
+    <string name="record_rule_initial_state_paused_desc">The recording will be paused when the call connects. Audio will not be recorded until the recording is resumed via the notification.</string>
+    <string name="record_rule_initial_state_recording_summary">Initial state: Record immediately</string>
+    <string name="record_rule_initial_state_paused_summary">Initial state: Paused until manually resumed</string>
+
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">Verzeichnis ändern</string>
     <string name="output_dir_bottom_sheet_filename_template">Dateinamenvorlage</string>
