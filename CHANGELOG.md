@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 2.10
 
 * Update German translations ([Issue #791], [PR #852 @ElsAr4e])
 * Add record rule option to start recordings in the paused state ([Issue #853], [PR #854 @chenxiaolong])
