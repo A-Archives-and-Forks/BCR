@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Update Simplified Chinese (zh-CN) translations ([PR #908 @lofx-lee])
+
 ### Version 3.4
 
 * Update dynamic background color to match AOSP Settings ([PR #905 @chenxiaolong])
@@ -1336,3 +1338,4 @@ Non-user-facing changes:
 [PR #905 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/905
 [PR #906 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/906
 [PR #907 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/907
+[PR #908 @lofx-lee]: https://github.com/chenxiaolong/BCR/pull/908
