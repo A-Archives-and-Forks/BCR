@@ -41,6 +41,7 @@ As the name alludes, BCR intends to be a basic as possible. The project will hav
 2. Install BCR as a system app.
 
     * **For devices rooted with Magisk/KernelSU**, simply flash the zip as a Magisk/KernelSU module from within the respective application.
+        * **If you use KernelSU**, ensure that a metamodule is installed. Then, in KernelSU Manager, change BCR's app profile to "Custom" and disable the "Unmount modules" option. BCR's files must remain mounted or else the app will crash.
         * **If you use any type of root hiding feature**, also extract the `.apk` from the zip and install it manually before rebooting. This works around crashes and other issues caused by BCR's APK being hidden from the system.
 
     * **For unrooted custom firmware**, flash the zip while booted into recovery.
