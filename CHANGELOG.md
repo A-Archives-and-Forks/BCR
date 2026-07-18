@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 3.5
 
 * Update Simplified Chinese (zh-CN) translations ([PR #908 @lofx-lee])
 
